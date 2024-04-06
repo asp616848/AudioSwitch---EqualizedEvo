@@ -1,4 +1,4 @@
-package com.example.audioswitch_equalizedevo.View.theme
+package com.example.audioswitch_equalizedevo.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
