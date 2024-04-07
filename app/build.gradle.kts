@@ -70,6 +70,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Cast dependencies for google services cast framework
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("androidx.mediarouter:mediarouter:1.7.0")
+    implementation ("com.google.android.gms:play-services-cast-framework:21.4.0")
+
+    
 }
 kapt {
     correctErrorTypes = true
