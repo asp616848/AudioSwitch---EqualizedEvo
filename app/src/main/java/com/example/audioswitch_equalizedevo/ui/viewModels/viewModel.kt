@@ -10,5 +10,11 @@ import kotlinx.coroutines.flow.asStateFlow
 class viewModel : ViewModel() {
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
-    
+
+    companion object {
+        fun fetchSongs() {
+            TODO("Not yet implemented")
+        }
+    }
+
 }

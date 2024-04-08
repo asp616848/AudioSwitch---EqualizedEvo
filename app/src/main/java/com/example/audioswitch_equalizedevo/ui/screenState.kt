@@ -1,7 +1,8 @@
 package com.example.audioswitch_equalizedevo.ui
 
 enum class screenState {
-    HOME,
+    HOME, // HomeScreen and SongScreen are same but it swipes into PlaylistScreen
+    PLAYER,
     PLAYLISTS,
     SETTINGS,
     EQUALIZER,

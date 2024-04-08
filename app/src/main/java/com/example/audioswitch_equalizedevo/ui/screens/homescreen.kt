@@ -17,10 +17,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.audioswitch_equalizedevo.R
+import com.example.audioswitch_equalizedevo.data.Songs
+import com.example.audioswitch_equalizedevo.ui.viewModels.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,4 +74,12 @@ fun HomeScreen() {
 @Composable
 fun SongsScreen(it: PaddingValues) {
     Text(text = "Songs Screen", modifier = Modifier.padding(it))
+    var songList by remember { mutableStateOf<List<Songs>>(emptyList()) }
+    LaunchedEffect(true) {
+        viewModel.fetchSongs()
+    }
+    songList.forEach {
+        Text(text = it.title)
+    }
+
 }
