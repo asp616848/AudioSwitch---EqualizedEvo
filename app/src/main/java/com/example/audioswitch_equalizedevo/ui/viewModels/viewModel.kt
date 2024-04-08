@@ -1,7 +1,7 @@
 package com.example.audioswitch_equalizedevo.ui.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.example.audioswitch_equalizedevo.data.UIState
+import com.example.audioswitch_equalizedevo.ui.UIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
