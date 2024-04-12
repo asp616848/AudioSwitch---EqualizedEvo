@@ -53,6 +53,7 @@ android {
 
 dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
+    implementation(libs.material)
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation(libs.androidx.core.ktx)
 
@@ -75,6 +76,7 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.mediarouter:mediarouter:1.7.0")
     implementation ("com.google.android.gms:play-services-cast-framework:21.4.0")
+    implementation ("androidx.compose.material:material-icons-extended-android:1.6.5")
 
     
 }
