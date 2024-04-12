@@ -1,5 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +31,7 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 
@@ -55,16 +57,17 @@ fun HomeScreen() {
                 actions = {
                     IconButton(onClick = { /* do something */ }) {
                         Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            contentDescription = "Liked Songs"
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Profile"
                         )
                     }
                 },
                 scrollBehavior = scrollBehavior,
             )
-        }
+        },
+        bottomBar = {}
     ) {
-        SongsScreen(it)
+        SwipeScreen()
     }
 }
 
