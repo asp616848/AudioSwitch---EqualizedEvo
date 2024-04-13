@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import com.example.audioswitch_equalizedevo.data.TabItem
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -59,15 +60,24 @@ val tabItems = listOf(
                 )
             }
         }
-        HorizontalPager(state = pagerState) { page ->
+        HorizontalPager(state = pagerState, Modifier.weight(1f)) { page ->
             when (page) {
                 0 -> {
                     Text("Page 1")
-                }
+                }// TODO PLAYER SCREEN
 
                 1 -> {
                     Text("Page 2")
-                }
+                }// TODO Spatial Audio Screen
+
+                2 -> {
+                    Text("Page 3")
+                }  // TODO Search Screen
+
+                3 -> {
+                    Text("Page 4")
+                } // TODO Equalizer Screen
+
             }
 
         }

@@ -66,22 +66,3 @@ fun HomeScreen() {
         SwipeScreen(it)
     }
 }
-
-@Composable
-fun SongsScreen(paddingValues: PaddingValues) {
-    Text(text = "Songs Screen", modifier = Modifier.padding(paddingValues))
-
-    val viewModel:SongsViewModel = SongsViewModel()
-    val songList by viewModel.songs.collectAsState(initial = emptyList())
-
-    LaunchedEffect(true) {
-        viewModel.fetchSongs()
-    }
-
-    LazyColumn(contentPadding = paddingValues){
-        items(songList) { song ->  /* can't use foreach here since
-         it's not a composable lambda function but items returns a composable lambda function*/
-            Text(text = song.title)
-        }
-    }
-}
