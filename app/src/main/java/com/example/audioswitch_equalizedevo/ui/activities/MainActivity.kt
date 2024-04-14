@@ -23,7 +23,7 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private val readAudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+    private val readAudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
         Manifest.permission.READ_MEDIA_AUDIO
     else
         Manifest.permission.READ_EXTERNAL_STORAGE
@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                 ActivityCompat.finishAffinity(this)
             }
         }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

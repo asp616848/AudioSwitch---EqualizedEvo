@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -62,7 +63,11 @@ fun HomeScreen(viewModel: SongsViewModel) {
                 scrollBehavior = scrollBehavior,
             )
         },
-        bottomBar = {}
+        bottomBar = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(Icons.Outlined.Search, contentDescription = "Search" )
+            }
+        }
     ) {
         SwipeScreen(it, viewModel)
     }

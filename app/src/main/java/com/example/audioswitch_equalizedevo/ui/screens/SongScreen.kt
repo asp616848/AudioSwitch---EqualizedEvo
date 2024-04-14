@@ -51,7 +51,7 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
                     Column {
                         Text(
                             text = "\nNo Songs Found",
-                            color = MaterialTheme.colorScheme.errorContainer,
+                            color = MaterialTheme.colorScheme.onError,
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier
                                 .padding(4.dp)
@@ -61,8 +61,6 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
                 }
             }
         }
-
-        PlayerCompact(viewModel)
     }
 
 }

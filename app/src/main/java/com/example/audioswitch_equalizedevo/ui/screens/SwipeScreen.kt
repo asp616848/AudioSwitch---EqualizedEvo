@@ -86,5 +86,7 @@ val tabItems = listOf(
             }
 
         }
+        PlayerCompact(viewModel)
+
     }
 }
