@@ -16,10 +16,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class SongsViewModel : ViewModel() {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
-    val songs_list: ArrayList<Songs> = ArrayList()
     fun fetchSongs(context: Context) {
         FetchMusic().getPlayList(context ).let {
-            songs_list.addAll(it)
+            _songs.value = it
         }
     }
     private val _uiState = MutableStateFlow(UIState())

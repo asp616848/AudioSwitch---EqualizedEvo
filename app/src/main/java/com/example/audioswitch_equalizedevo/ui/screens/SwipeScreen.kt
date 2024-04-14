@@ -26,7 +26,7 @@ import com.example.audioswitch_equalizedevo.data.TabItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SwipeScreen(paddingValues: PaddingValues) {
+fun SwipeScreen(paddingValues: PaddingValues, context: android.content.Context) {
 val tabItems = listOf(
     TabItem(title = "Songs", selectedIcon = Icons.Default.Home, unselectedIcon = Icons.TwoTone.Home),
     TabItem(title = "Tab 2", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
@@ -63,7 +63,7 @@ val tabItems = listOf(
         HorizontalPager(state = pagerState, Modifier.weight(1f)) { page ->
             when (page) {
                 0 -> {
-                    SongsScreen(paddingValues = PaddingValues())
+                    SongsScreen(paddingValues = PaddingValues(), context = context)
                 }
 
                 1 -> {

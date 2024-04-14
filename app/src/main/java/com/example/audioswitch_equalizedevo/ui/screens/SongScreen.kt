@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @Composable
-fun SongsScreen(paddingValues: PaddingValues) {
+fun SongsScreen(paddingValues: PaddingValues, context: android.content.Context) {
     Text(text = "Songs Screen", modifier = Modifier.padding(paddingValues))
 
     val viewModel: SongsViewModel = SongsViewModel()
-    val songList by viewModel.songs.collectAsState(initial = emptyList())
+    val songList by viewModel.songs.collectAsState()
 
     LaunchedEffect(true) {
-        viewModel.fetchSongs()
+        viewModel.fetchSongs(context = context)
     }
 
     LazyColumn(contentPadding = paddingValues){

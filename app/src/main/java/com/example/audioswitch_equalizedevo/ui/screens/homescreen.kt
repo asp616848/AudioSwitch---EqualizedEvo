@@ -1,5 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,7 +27,7 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen( context: Context) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -63,6 +64,6 @@ fun HomeScreen() {
         },
         bottomBar = {}
     ) {
-        SwipeScreen(it)
+        SwipeScreen(it, context = context)
     }
 }
