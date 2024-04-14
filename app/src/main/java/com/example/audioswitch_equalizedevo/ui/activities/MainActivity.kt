@@ -21,7 +21,8 @@ import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
 
 class MainActivity : ComponentActivity() {
-    private val readAudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val readAudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
         Manifest.permission.READ_MEDIA_AUDIO
     else
         Manifest.permission.READ_EXTERNAL_STORAGE
@@ -31,11 +32,11 @@ class MainActivity : ComponentActivity() {
             if (isGranted) {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission is required to access Music Files.", Toast.LENGTH_SHORT).show()
                 ActivityCompat.finishAffinity(this)
             }
         }
-    @RequiresApi(Build.VERSION_CODES.S)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
@@ -50,6 +51,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
