@@ -27,7 +27,7 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen( context: Context) {
+fun HomeScreen(viewModel: SongsViewModel) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -64,6 +64,6 @@ fun HomeScreen( context: Context) {
         },
         bottomBar = {}
     ) {
-        SwipeScreen(it, context = context)
+        SwipeScreen(it, viewModel)
     }
 }

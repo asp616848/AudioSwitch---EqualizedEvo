@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
+import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -40,13 +41,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
+        val viewModel: SongsViewModel = SongsViewModel()
+        viewModel.fetchSongs(context = this)
         setContent {
             AudioSwitch_EqualizedEvoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(context = this@MainActivity)
+                    HomeScreen(viewModel)
                 }
             }
         }
