@@ -19,6 +19,7 @@ class SongsViewModel : ViewModel() {
     fun fetchSongs(context: Context) {
         FetchMusic().getPlayList(context ).let {
             _songs.value = it
+
         }
     }
     private val _uiState = MutableStateFlow(UIState())
