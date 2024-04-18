@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
         checkPermission()
         val viewModel: SongsViewModel = SongsViewModel()
         viewModel.fetchSongs(context = this)
+        viewModel.initializeExoPlayer(context = this)
         setContent {
             AudioSwitch_EqualizedEvoTheme {
                 Surface(
