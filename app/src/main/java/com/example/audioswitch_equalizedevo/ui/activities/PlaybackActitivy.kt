@@ -6,5 +6,4 @@ import dagger.Component
 
 class PlaybackActitivy : ComponentActivity(){
     val player = ExoPlayer.Builder(this).build()
-    
 }
