@@ -1,10 +1,14 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -37,7 +41,7 @@ val tabItems = listOf(
     TabItem(title = "Tab 2", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
 )
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
-    var pagerState = rememberPagerState { tabItems.size }
+    val pagerState = rememberPagerState { tabItems.size }
     LaunchedEffect(key1 = pagerState.currentPage) {
         selectedTabIndex = pagerState.currentPage
     }
@@ -87,6 +91,5 @@ val tabItems = listOf(
 
         }
         PlayerCompact(viewModel)
-
     }
 }

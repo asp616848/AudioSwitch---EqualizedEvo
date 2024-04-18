@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
@@ -27,14 +28,12 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.READ_MEDIA_AUDIO
     else
         Manifest.permission.READ_EXTERNAL_STORAGE
-
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Permission is required to access Music Files.", Toast.LENGTH_SHORT).show()
-                ActivityCompat.finishAffinity(this)
+                Toast.makeText(this, "Permission is required to access Music Files, Enable it in device settings", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -42,9 +41,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-        val viewModel: SongsViewModel = SongsViewModel()
-        viewModel.fetchSongs(context = this)
-        viewModel.initializeExoPlayer(context = this)
+        val viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
         setContent {
             AudioSwitch_EqualizedEvoTheme {
                 Surface(

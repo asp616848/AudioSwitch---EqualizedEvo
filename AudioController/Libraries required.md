@@ -20,3 +20,7 @@ audioKinetic as secondary option for spatial audio:
 
 #### Spotify Android SDK
 		https://developer.spotify.com/documentation/android/tutorials/getting-started#connect-to-app-remote
+
+self reminder to refer to links below after done with basic player:
+		https://developer.android.com/studio/build/shrink-code
+		https://chat.openai.com/c/f2d18060-5798-4597-8dc3-b347c5b098c8
