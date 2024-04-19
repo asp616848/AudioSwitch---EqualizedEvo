@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
@@ -33,9 +34,9 @@ import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
+import coil.compose.rememberImagePainter
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
-//implement using constraint layout for practice
 @Composable
 fun PlayerCompact(viewModel: SongsViewModel) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
@@ -54,9 +55,14 @@ fun PlayerCompact(viewModel: SongsViewModel) {
         // Song Icon
         viewModel.getcurrentSong().let {
             Image(
-                painter = Uri.parse(it.fileUri),
+                painter = rememberImagePainter(data = Uri.parse(it.albumArt), builder = {
+                    crossfade(true) // Enable crossfade animation
+                    placeholder(androidx.media3.ui.R.drawable.exo_ic_audiotrack) // Placeholder while loading
+                }),
                 contentDescription = "Song Icon",
-                modifier = Modifier.size(35.dp)
+                modifier = Modifier
+                    .requiredSize(60.dp)
+                    .padding(4.dp)
             )
 
             // Text
