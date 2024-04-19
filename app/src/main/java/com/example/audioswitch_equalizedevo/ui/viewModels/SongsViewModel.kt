@@ -47,6 +47,11 @@ class SongsViewModel(application : Application) : AndroidViewModel( application)
             exoPlayer?.play()
         }
     }
+    fun getcurrentSong() : Songs {
+        return exoPlayer.currentMediaItem?.mediaMetadata?.title?.let { title ->
+            songs.value.first { it.title == title }
+        } ?: songs.value.first()
+    }
     override fun onCleared() {
         super.onCleared()
         exoPlayer?.release()

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.filled.Rectangle
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.sharp.MoreVert
 import androidx.compose.material3.Icon
@@ -93,12 +94,17 @@ fun SongRow(song: Songs) {
         Box(
             modifier = Modifier.size(60.dp),
             contentAlignment = Alignment.Center
+
         ) {
+
+            Icon(Icons.Default.MusicNote, contentDescription = "Default Thumbnail", modifier = Modifier.size(40.dp), tint = Color.Magenta)
             Image(
                 painter = painter,
-                contentDescription = "Thumbnail"
+                contentDescription = "Thumbnail",
+                modifier = Modifier
+                    .requiredSize(60.dp)
+                    .padding(4.dp)
             )
-
         }
         Column(
             modifier = Modifier

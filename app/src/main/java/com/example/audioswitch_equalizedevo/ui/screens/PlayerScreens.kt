@@ -1,11 +1,15 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MusicNote
@@ -32,7 +36,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 //implement using constraint layout for practice
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PlayerCompact(viewModel: SongsViewModel) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
@@ -41,24 +44,27 @@ fun PlayerCompact(viewModel: SongsViewModel) {
     LaunchedEffect(uiState.isPlaying) {
         playing = uiState.isPlaying
     }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .clickable(onClick = {})
+            .clickable(onClick = { /*Navigate to Player screen?*/ })
+            .padding(6.dp)
     ) {
         // Song Icon
-        Icon(
-            Icons.Filled.MusicNote,
-            contentDescription = "Song Icon",
-            modifier = Modifier.size(35.dp)
-        )
+        viewModel.getcurrentSong().let {
+            Image(
+                painter = Uri.parse(it.fileUri),
+                contentDescription = "Song Icon",
+                modifier = Modifier.size(35.dp)
+            )
 
-        // Text
-        Column(modifier = Modifier.weight(1f)) {
-            Text(text = "Song Title")
-            Text(text = "Artist Name")
+            // Text
+            Column(modifier = Modifier.weight(1f).offset(x = 6.dp)) {
+
+                Text(text = it.title)
+                Text(text = it.artist)
+            }
         }
 
         // Previous Button
@@ -81,7 +87,6 @@ fun PlayerCompact(viewModel: SongsViewModel) {
                 contentDescription = if (playing) "Pause" else "Play",
             )
         }
-
         // Next Button
         IconButton(
             onClick = { /*TODO*/ },
@@ -89,5 +94,12 @@ fun PlayerCompact(viewModel: SongsViewModel) {
         ) {
             Icon(Icons.Filled.SkipNext, contentDescription = "Next")
         }
+    }
+}
+
+@Composable
+fun PlayerScreen(){
+    Column {
+        Text(text = "Player Screen")
     }
 }
