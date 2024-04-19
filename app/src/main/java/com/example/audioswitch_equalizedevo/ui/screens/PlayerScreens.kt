@@ -75,7 +75,7 @@ fun PlayerCompact(viewModel: SongsViewModel) {
 
         // Previous Button
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.playPrev() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
@@ -95,7 +95,7 @@ fun PlayerCompact(viewModel: SongsViewModel) {
         }
         // Next Button
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.playNext() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipNext, contentDescription = "Next")

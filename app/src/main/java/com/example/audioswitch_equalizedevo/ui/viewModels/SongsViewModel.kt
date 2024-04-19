@@ -3,6 +3,8 @@ package com.example.audioswitch_equalizedevo.ui.viewModels
 import FetchMusic
 import android.app.Application
 import android.content.Context
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.MainThread
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,7 @@ import com.example.audioswitch_equalizedevo.ui.UIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.net.URI
 
 
 //taken viewModel inspiration from my scramble codelab project
@@ -25,6 +28,8 @@ class SongsViewModel(application : Application) : AndroidViewModel( application)
     }
 
     val exoPlayer = ExoPlayer.Builder(application).build()
+    var MediaList: List<MediaItem> = emptyList()
+
     fun fetchSongs(context: Context) {
         FetchMusic().getPlayList(context ).let {
             _songs.value = it
@@ -34,17 +39,20 @@ class SongsViewModel(application : Application) : AndroidViewModel( application)
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
+
     fun playPause() {
         if(_uiState.value.isPlaying){
             _uiState.value = _uiState.value.copy(isPlaying = false)
-            exoPlayer?.pause()
+            exoPlayer.pause()
         }
         else{
             _uiState.value = _uiState.value.copy(isPlaying = true)
-            val mediaItem = MediaItem.fromUri(this.songs.value.first().fileUri)
-            exoPlayer?.setMediaItem(mediaItem)
-            exoPlayer?.prepare()
-            exoPlayer?.play()
+            for (song in songs.value){
+                MediaList += MediaItem.fromUri (Uri.parse(song.fileUri))
+            }
+            exoPlayer.setMediaItems(MediaList)
+            exoPlayer.prepare()
+            exoPlayer.play()
         }
     }
     fun getcurrentSong() : Songs {
@@ -54,6 +62,21 @@ class SongsViewModel(application : Application) : AndroidViewModel( application)
     }
     override fun onCleared() {
         super.onCleared()
-        exoPlayer?.release()
+        exoPlayer.release()
+    }
+
+    fun playNext() {
+        if (exoPlayer.hasNextMediaItem()){
+            exoPlayer.seekToNextMediaItem()
+        }else{
+            Toast.makeText(getApplication(), "No Next Song", Toast.LENGTH_SHORT).show()
+        }
+    }
+    fun playPrev() {
+        if (exoPlayer.hasPreviousMediaItem()){
+            exoPlayer.seekToPreviousMediaItem()
+        }else{
+            Toast.makeText(getApplication(), "No Previous Song", Toast.LENGTH_SHORT).show()
+        }
     }
 }
