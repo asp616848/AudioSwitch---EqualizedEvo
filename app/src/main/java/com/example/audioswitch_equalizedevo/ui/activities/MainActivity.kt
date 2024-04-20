@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -23,7 +24,9 @@ import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
 import com.example.audioswitch_equalizedevo.ui.screens.PlayerScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val readAudioPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
@@ -45,6 +48,7 @@ class MainActivity : ComponentActivity() {
         checkPermission()
         val viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
         setContent {
+            enableEdgeToEdge()
             val navController = rememberNavController()
             AudioSwitch_EqualizedEvoTheme {
                 Surface(
