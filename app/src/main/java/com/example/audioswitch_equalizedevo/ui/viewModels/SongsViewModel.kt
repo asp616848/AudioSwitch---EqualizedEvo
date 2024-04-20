@@ -12,6 +12,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
+import com.example.audioswitch_equalizedevo.ui.screenState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,7 @@ import java.net.URI
 
 
 //taken viewModel inspiration from my scramble codelab project
-
+@HiltViewModel
 class SongsViewModel(application : Application) : AndroidViewModel( application) {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
@@ -78,5 +80,9 @@ class SongsViewModel(application : Application) : AndroidViewModel( application)
         }else{
             Toast.makeText(getApplication(), "No Previous Song", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun changeScreen(s: screenState) {
+        _uiState.value = _uiState.value.copy(screenState = s)
     }
 }

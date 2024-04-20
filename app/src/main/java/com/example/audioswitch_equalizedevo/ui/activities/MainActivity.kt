@@ -1,7 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.activities
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -15,10 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
+import com.example.audioswitch_equalizedevo.ui.screens.PlayerScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
@@ -43,12 +45,16 @@ class MainActivity : ComponentActivity() {
         checkPermission()
         val viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
         setContent {
+            val navController = rememberNavController()
             AudioSwitch_EqualizedEvoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(viewModel)
+                    NavHost(navController = navController, startDestination = "home") {
+                        composable("home") { HomeScreen(navController, viewModel) }
+                        composable("player") { PlayerScreen(navController, viewModel) }
+                    }
                 }
             }
         }

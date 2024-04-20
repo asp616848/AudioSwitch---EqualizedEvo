@@ -30,12 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.NavController
 import com.example.audioswitch_equalizedevo.data.TabItem
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SwipeScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
+fun SwipeScreen(navController: NavController, paddingValues: PaddingValues, viewModel: SongsViewModel) {
 val tabItems = listOf(
     TabItem(title = "Songs", selectedIcon = Icons.Default.Home, unselectedIcon = Icons.TwoTone.Home),
     TabItem(title = "Tab 2", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
@@ -90,6 +91,6 @@ val tabItems = listOf(
             }
 
         }
-        PlayerCompact(viewModel)
+        PlayerCompact(navController, viewModel)
     }
 }

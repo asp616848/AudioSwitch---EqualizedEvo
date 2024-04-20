@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -54,6 +55,7 @@ android {
 dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     implementation(libs.material)
+    implementation(libs.androidx.navigation.runtime.ktx)
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation(libs.androidx.core.ktx)
 
@@ -84,9 +86,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation ("io.coil-kt:coil-compose:1.4.0")
-
-
-
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    kapt ("com.google.dagger:hilt-compiler:2.44")
 }
 kapt {
     correctErrorTypes = true

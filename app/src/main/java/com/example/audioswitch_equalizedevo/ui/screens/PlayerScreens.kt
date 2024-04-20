@@ -1,7 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.twotone.Pause
@@ -28,17 +26,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @Composable
-fun PlayerCompact(viewModel: SongsViewModel) {
+fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
 
@@ -49,7 +46,9 @@ fun PlayerCompact(viewModel: SongsViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .clickable(onClick = { /*Navigate to Player screen?*/ })
+            .clickable(onClick = { navController.navigate("player")
+            viewModel.changeScreen(screenState.PLAYER)
+            })
             .padding(6.dp)
     ) {
         // Song Icon
@@ -66,7 +65,9 @@ fun PlayerCompact(viewModel: SongsViewModel) {
             )
 
             // Text
-            Column(modifier = Modifier.weight(1f).offset(x = 6.dp)) {
+            Column(modifier = Modifier
+                .weight(1f)
+                .offset(x = 6.dp)) {
 
                 Text(text = it.title)
                 Text(text = it.artist)
@@ -104,7 +105,7 @@ fun PlayerCompact(viewModel: SongsViewModel) {
 }
 
 @Composable
-fun PlayerScreen(){
+fun PlayerScreen(navController: NavHostController, viewModel: SongsViewModel) {
     Column {
         Text(text = "Player Screen")
     }
