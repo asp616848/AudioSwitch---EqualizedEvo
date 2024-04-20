@@ -14,24 +14,21 @@ import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.net.URI
-import javax.inject.Inject
+
 
 //taken viewModel inspiration from my scramble codelab project
-@HiltViewModel
-class SongsViewModel @Inject constructor(
-    @ActivityContext context: Context) : ViewModel() {
+class SongsViewModel(application : Application) : AndroidViewModel( application) {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
-        fetchSongs(context)
+        fetchSongs(application)
     }
-    val exoPlayer = ExoPlayer.Builder(context).build()
+
+    val exoPlayer = ExoPlayer.Builder(application).build()
     var MediaList: List<MediaItem> = emptyList()
 
     fun fetchSongs(context: Context) {
@@ -72,11 +69,15 @@ class SongsViewModel @Inject constructor(
     fun playNext() {
         if (exoPlayer.hasNextMediaItem()){
             exoPlayer.seekToNextMediaItem()
+        }else{
+            Toast.makeText(getApplication(), "No Next Song", Toast.LENGTH_SHORT).show()
         }
     }
     fun playPrev() {
         if (exoPlayer.hasPreviousMediaItem()){
             exoPlayer.seekToPreviousMediaItem()
+        }else{
+            Toast.makeText(getApplication(), "No Previous Song", Toast.LENGTH_SHORT).show()
         }
     }
     fun changeScreen(s: screenState) {
