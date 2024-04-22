@@ -1,6 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.viewModels
 
-import FetchMusic
+
 import android.app.Application
 import android.content.Context
 import android.net.Uri
@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.audioswitch_equalizedevo.data.FetchMusic
 import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
@@ -28,14 +29,16 @@ class SongsViewModel @Inject constructor(@ApplicationContext private val context
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
-        fetchSongs(context)
+        fetchSongs()
     }
 
     val exoPlayer = ExoPlayer.Builder(context).build()
     var MediaList: List<MediaItem> = emptyList()
 
-    fun fetchSongs(context: Context) {
-        FetchMusic().getPlayList(context ).let {
+    @Inject lateinit var fetchMusic: FetchMusic
+
+    fun fetchSongs() {
+        fetchMusic.getPlayList().let {
             _songs.value = it
         }
     }
@@ -60,9 +63,12 @@ class SongsViewModel @Inject constructor(@ApplicationContext private val context
         }
     }
     fun getcurrentSong() : Songs {
-        return exoPlayer.currentMediaItem?.mediaMetadata?.title?.let { title ->
-            songs.value.first { it.title == title }
-        } ?: songs.value.first()
+        if(!songs.value.isEmpty()){
+            return exoPlayer.currentMediaItem?.mediaMetadata?.title?.let { title ->
+                songs.value.first { it.title == title }
+            } ?: songs.value.first()
+        }
+        return Songs()
     }
     override fun onCleared() {
         super.onCleared()
