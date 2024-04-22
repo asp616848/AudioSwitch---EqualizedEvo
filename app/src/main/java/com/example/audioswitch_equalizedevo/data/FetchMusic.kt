@@ -4,13 +4,15 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import com.example.audioswitch_equalizedevo.data.Songs
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class FetchMusic {
+class FetchMusic @Inject constructor(@ActivityContext val context: Context){
 
     private val songList = ArrayList<Songs>()
     private val albumArtUri: Uri = Uri.parse("content://media/external/audio/albumart")
 
-    fun getPlayList(context: Context): ArrayList<Songs> {
+    fun getPlayList() : ArrayList<Songs> {
         val selection: String? = null
         val selectionArgs: Array<String>? = null
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.audioswitch_equalizedevo.data.ExoPlayer1
 import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
@@ -24,18 +25,18 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SongsViewModel () : ViewModel() {
+class SongsViewModel @Inject constructor(
+    private val FetchMusic: FetchMusic,
+    private val exoPlayer: ExoPlayer1
+) : ViewModel() {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
-        fetchSongs(context)
+        fetchSongs()
     }
 
-    val exoPlayer = ExoPlayer.Builder(context).build()
-    var MediaList: List<MediaItem> = emptyList()
-
-    fun fetchSongs(context: Context) {
-        FetchMusic().getPlayList(context ).let {
+    fun fetchSongs() {
+        FetchMusic.getPlayList().let {
             _songs.value = it
         }
     }
@@ -43,45 +44,29 @@ class SongsViewModel () : ViewModel() {
     private val _uiState = MutableStateFlow(UIState())
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
 
-
+    override fun onCleared() {
+        super.onCleared()
+        exoPlayer.getExoPlayer().release()
+    }
     fun playPause() {
         if(_uiState.value.isPlaying){
             _uiState.value = _uiState.value.copy(isPlaying = false)
-            exoPlayer.pause()
+            exoPlayer.getExoPlayer().pause()
         }
         else{
             _uiState.value = _uiState.value.copy(isPlaying = true)
             for (song in songs.value){
-                MediaList += MediaItem.fromUri (Uri.parse(song.fileUri))
+                exoPlayer.MediaList += MediaItem.fromUri (Uri.parse(song.fileUri))
             }
-            exoPlayer.setMediaItems(MediaList)
-            exoPlayer.prepare()
-            exoPlayer.play()
+            exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
+            exoPlayer.getExoPlayer().prepare()
+            exoPlayer.getExoPlayer().play()
         }
     }
     fun getcurrentSong() : Songs {
-        return exoPlayer.currentMediaItem?.mediaMetadata?.title?.let { title ->
+        return exoPlayer.getExoPlayer().currentMediaItem?.mediaMetadata?.title?.let { title ->
             songs.value.first { it.title == title }
         } ?: songs.value.first()
-    }
-    override fun onCleared() {
-        super.onCleared()
-        exoPlayer.release()
-    }
-
-    fun playNext() {
-        if (exoPlayer.hasNextMediaItem()){
-            exoPlayer.seekToNextMediaItem()
-        }else{
-            Toast.makeText(context, "No Next Song", Toast.LENGTH_SHORT).show()
-        }
-    }
-    fun playPrev() {
-        if (exoPlayer.hasPreviousMediaItem()){
-            exoPlayer.seekToPreviousMediaItem()
-        }else{
-            Toast.makeText(context, "No Previous Song", Toast.LENGTH_SHORT).show()
-        }
     }
     fun changeScreen(s: screenState) {
         _uiState.value = _uiState.value.copy(screenState = s)

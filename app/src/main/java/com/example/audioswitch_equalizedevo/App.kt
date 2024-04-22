@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
+@EntryPoint
 class App:Application() {
     override fun onCreate() {
         super.onCreate()
