@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SongsViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel() {
+class SongsViewModel () : ViewModel() {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
