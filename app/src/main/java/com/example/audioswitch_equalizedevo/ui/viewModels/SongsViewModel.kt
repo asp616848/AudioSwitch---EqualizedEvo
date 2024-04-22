@@ -1,6 +1,5 @@
 package com.example.audioswitch_equalizedevo.ui.viewModels
 
-import FetchMusic
 import android.app.Application
 import android.content.Context
 import android.net.Uri
@@ -11,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.audioswitch_equalizedevo.data.ExoPlayer1
+import com.example.audioswitch_equalizedevo.data.FetchMusic
 import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SongsViewModel @Inject constructor(
-    private val FetchMusic: FetchMusic,
+    private val fetchMusic: FetchMusic,
     private val exoPlayer: ExoPlayer1
 ) : ViewModel() {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
@@ -36,7 +36,7 @@ class SongsViewModel @Inject constructor(
     }
 
     fun fetchSongs() {
-        FetchMusic.getPlayList().let {
+        fetchMusic.getPlayList().let {
             _songs.value = it
         }
     }

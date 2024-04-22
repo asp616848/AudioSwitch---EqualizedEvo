@@ -1,9 +1,10 @@
+package com.example.audioswitch_equalizedevo.data
+
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import com.example.audioswitch_equalizedevo.data.Songs
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
