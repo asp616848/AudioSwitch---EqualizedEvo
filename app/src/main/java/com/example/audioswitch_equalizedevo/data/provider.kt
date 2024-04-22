@@ -9,7 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(Singleton::class)
 object ExoplayerModule {
     @Provides
     @Singleton
@@ -20,7 +20,7 @@ object ExoplayerModule {
 }
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(Singleton::class)
 object FetchMusicModule {
 
     @Provides

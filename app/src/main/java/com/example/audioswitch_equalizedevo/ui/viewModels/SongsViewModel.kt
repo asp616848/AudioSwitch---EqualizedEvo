@@ -1,26 +1,17 @@
 package com.example.audioswitch_equalizedevo.ui.viewModels
 
-import android.app.Application
-import android.content.Context
 import android.net.Uri
-import android.widget.Toast
-import androidx.annotation.MainThread
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
 import com.example.audioswitch_equalizedevo.data.ExoPlayer1
 import com.example.audioswitch_equalizedevo.data.FetchMusic
 import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.net.URI
 import javax.inject.Inject
 
 
