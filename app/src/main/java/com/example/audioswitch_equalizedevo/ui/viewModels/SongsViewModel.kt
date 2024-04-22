@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SongsViewModel @Inject constructor(
-    private val fetchMusic: FetchMusic,
-    private val exoPlayer: ExoPlayer1
+    val fetchMusic: FetchMusic,
+    val exoPlayer: ExoPlayer1
 ) : ViewModel() {
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs

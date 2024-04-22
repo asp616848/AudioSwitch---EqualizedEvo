@@ -76,7 +76,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
 
         // Previous Button
         IconButton(
-            onClick = { viewModel.playPrev() },
+            onClick = { viewModel.exoPlayer.playPrev() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
@@ -96,7 +96,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
         }
         // Next Button
         IconButton(
-            onClick = { viewModel.playNext() },
+            onClick = { viewModel.exoPlayer.playNext() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipNext, contentDescription = "Next")
