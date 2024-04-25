@@ -43,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.9.0"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -53,10 +53,9 @@ android {
 }
 
 dependencies {
-    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.google.dagger:hilt-android:2.51.1")
     implementation(libs.material)
     implementation(libs.androidx.navigation.runtime.ktx)
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation(libs.androidx.core.ktx)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -87,7 +86,7 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.3.1")
     implementation ("io.coil-kt:coil-compose:2.4.0")
     implementation ("androidx.navigation:navigation-compose:2.7.7")
-    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+    annotationProcessor ("com.google.dagger:hilt-compiler:2.51.1")
     implementation ("com.google.dagger:hilt-android:2.51.1")
 }
 kapt {
