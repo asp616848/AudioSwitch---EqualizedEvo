@@ -54,10 +54,15 @@ class SongsViewModel @Inject constructor(
             exoPlayer.getExoPlayer().play()
         }
     }
-    fun getcurrentSong() : Songs {
-        return exoPlayer.getExoPlayer().currentMediaItem?.mediaMetadata?.title?.let { title ->
-            songs.value.first { it.title == title }
-        } ?: songs.value.first()
+    fun getcurrentSong(): Songs {
+        if(!songs.value.isEmpty()){
+            return exoPlayer.getExoPlayer().currentMediaItem?.mediaMetadata?.title?.let { title ->
+                songs.value.first { it.title == title }
+            } ?: songs.value.first()
+        }
+        else{
+            return Songs(title = "No Song selected")
+        }
     }
     fun changeScreen(s: screenState) {
         _uiState.value = _uiState.value.copy(screenState = s)
