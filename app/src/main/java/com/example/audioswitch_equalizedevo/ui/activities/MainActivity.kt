@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.screens.HomeScreen
 import com.example.audioswitch_equalizedevo.ui.screens.PlayerScreen
 import com.example.audioswitch_equalizedevo.ui.theme.AudioSwitch_EqualizedEvoTheme
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-        val viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
+        val viewModel : SongsViewModel by viewModels()
         setContent {
             enableEdgeToEdge()
             val navController = rememberNavController()

@@ -27,10 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.media3.ui.R
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
@@ -54,10 +58,13 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
         // Song Icon
         viewModel.getcurrentSong().let {
             Image(
-                painter = rememberImagePainter(data = Uri.parse(it.albumArt), builder = {
+                painter = // Enable crossfade animation
+                rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
+                    (LocalContext.current).data(data = Uri.parse(it.albumArt)).apply(block = fun ImageRequest.Builder.() {
                     crossfade(true) // Enable crossfade animation
-                    placeholder(androidx.media3.ui.R.drawable.exo_ic_audiotrack) // Placeholder while loading
-                }),
+                    placeholder(R.drawable.exo_ic_audiotrack) // Placeholder while loading
+                }).build()
+                ),
                 contentDescription = "Song Icon",
                 modifier = Modifier
                     .requiredSize(60.dp)
@@ -76,7 +83,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
 
         // Previous Button
         IconButton(
-            onClick = { viewModel.playPrev() },
+            onClick = { viewModel.exoPlayer.playPrev() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
@@ -96,7 +103,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
         }
         // Next Button
         IconButton(
-            onClick = { viewModel.playNext() },
+            onClick = { viewModel.exoPlayer.playNext() },
             modifier = Modifier.size(35.dp)
         ) {
             Icon(Icons.Filled.SkipNext, contentDescription = "Next")
