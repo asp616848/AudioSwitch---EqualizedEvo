@@ -54,12 +54,14 @@ class SongsViewModel @Inject constructor(
             exoPlayer.getExoPlayer().play()
         }
     }
-    fun playSong(song: Songs) {
+    fun playSong(song: Songs) {  //on ROW TAP
         exoPlayer.getExoPlayer().pause()
-        val index = exoPlayer.MediaList.indexOfFirst { it.mediaMetadata.title == song.title }
-        exoPlayer.getExoPlayer().seekTo(index, 0)
+        exoPlayer.MediaList = emptyList()
+        exoPlayer.MediaList += MediaItem.fromUri (Uri.parse(song.fileUri))
+        exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
+        _uiState.value = _uiState.value.copy(isPlaying = true)
     }
     fun getcurrentSong(): Songs {
         if(!songs.value.isEmpty()){
