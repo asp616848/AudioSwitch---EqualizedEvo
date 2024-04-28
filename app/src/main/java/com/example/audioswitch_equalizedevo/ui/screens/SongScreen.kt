@@ -47,6 +47,9 @@ import com.example.audioswitch_equalizedevo.R
 fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
 
     val songList by viewModel.songs.collectAsState()
+    fun playSong(song: Songs) {
+        viewModel.playSong(song)
+    }
 
     Column{
         LazyColumn(contentPadding = paddingValues,
@@ -58,7 +61,7 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
             if (songList.isNotEmpty()) {
                 items(songList) { song ->  /* can't use foreach here since
      it's not a composable lambda function but items returns a composable lambda function*/
-                    SongRow(song = song)
+                    SongRow(song = song, ::playSong) // :: is used to pass a reference to a function
                 }
             } else {
                 item {
@@ -81,8 +84,8 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
 
 @SuppressLint("PrivateResource")
 @Composable
-fun SongRow(song: Songs) {
-    Row(modifier = Modifier.clickable(onClick = {})){
+fun SongRow(song: Songs, playSong: (Songs) -> Unit){
+    Row(modifier = Modifier.clickable(onClick = { playSong(song) })){
         val uri = Uri.parse(song.albumArt)
         val painter = rememberImagePainter(
             data = uri,
@@ -128,4 +131,3 @@ fun SongRow(song: Songs) {
         }
     }
 }
-
