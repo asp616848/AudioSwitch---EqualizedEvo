@@ -56,7 +56,6 @@ class SongsViewModel @Inject constructor(
     }
     fun playSong(song: Songs) {
         exoPlayer.getExoPlayer().pause()
-        exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         val index = exoPlayer.MediaList.indexOfFirst { it.mediaMetadata.title == song.title }
         exoPlayer.getExoPlayer().seekTo(index, 0)
         exoPlayer.getExoPlayer().prepare()
