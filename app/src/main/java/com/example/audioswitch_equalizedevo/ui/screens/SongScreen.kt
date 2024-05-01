@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.hardware.biometrics.BiometricManager.Strings
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -135,15 +137,22 @@ fun SongRow(song: Songs, playSong: (Songs) -> Unit){
         }
         val list: List<String> = listOf("Play", "Add to Queue", "Add to Playlist", "Delete")
         var expanded by rememberSaveable { mutableStateOf(false) }
-        IconButton(onClick = { expanded = true}) {
-            Icon(Icons.Sharp.MoreVert, contentDescription = "More Options", modifier = Modifier.weight(1f))
-        }
-        DropdownMenu(expanded = expanded,
-            onDismissRequest = { expanded = false},
-            modifier = Modifier.offset(x = 40.dp, y = 0.dp),
-            allignment = Alignment.CenterStart) {
-            list.forEach {
-                DropdownMenuItem(text = { Text(text = it)}, onClick = { expanded = false})
+        Box{
+            IconButton(onClick = { expanded = true}) {
+                Icon(
+                    Icons.Sharp.MoreVert,
+                    contentDescription = "More Options"
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.animateContentSize { initialValue, targetValue -> }
+            ) {
+                list.forEach {
+                    DropdownMenuItem(text = { Text(text = it) }, onClick = { expanded = false })
+                }
             }
         }
     }
