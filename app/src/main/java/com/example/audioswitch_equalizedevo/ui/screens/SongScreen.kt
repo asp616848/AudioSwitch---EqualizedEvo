@@ -1,6 +1,7 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
 import android.annotation.SuppressLint
+import android.hardware.biometrics.BiometricManager.Strings
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -23,6 +26,8 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Rectangle
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.sharp.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +36,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -97,7 +105,6 @@ fun SongRow(song: Songs, playSong: (Songs) -> Unit){
         Box(
             modifier = Modifier.size(60.dp),
             contentAlignment = Alignment.Center
-
         ) {
 
             Icon(Icons.Default.MusicNote, contentDescription = "Default Thumbnail", modifier = Modifier.size(40.dp), tint = Color.Magenta)
@@ -126,8 +133,18 @@ fun SongRow(song: Songs, playSong: (Songs) -> Unit){
                 color = Color.Gray
             )
         }
-        IconButton(onClick = { }) {
+        val list: List<String> = listOf("Play", "Add to Queue", "Add to Playlist", "Delete")
+        var expanded by rememberSaveable { mutableStateOf(false) }
+        IconButton(onClick = { expanded = true}) {
             Icon(Icons.Sharp.MoreVert, contentDescription = "More Options", modifier = Modifier.weight(1f))
+        }
+        DropdownMenu(expanded = expanded,
+            onDismissRequest = { expanded = false},
+            modifier = Modifier.offset(x = 40.dp, y = 0.dp),
+            allignment = Alignment.CenterStart) {
+            list.forEach {
+                DropdownMenuItem(text = { Text(text = it)}, onClick = { expanded = false})
+            }
         }
     }
 }
