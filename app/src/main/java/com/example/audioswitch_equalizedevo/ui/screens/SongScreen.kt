@@ -135,7 +135,7 @@ fun SongRow(song: Songs, playSong: (Songs) -> Unit){
                 color = Color.Gray
             )
         }
-        val list: List<String> = listOf("Play", "Add to Queue", "Add to Playlist", "Delete")
+        val list: List<String> = listOf("Like", "Add to Queue", "Add to Playlist", "Delete")
         var expanded by rememberSaveable { mutableStateOf(false) }
         Box{
             IconButton(onClick = { expanded = true}) {
@@ -148,10 +148,12 @@ fun SongRow(song: Songs, playSong: (Songs) -> Unit){
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.animateContentSize { initialValue, targetValue -> }
             ) {
                 list.forEach {
-                    DropdownMenuItem(text = { Text(text = it) }, onClick = { expanded = false })
+                    DropdownMenuItem(text = { Text(text = it) },
+                        onClick = {
+                            expanded = false   //TODO: Implement the actions for each drop down button
+                        })
                 }
             }
         }

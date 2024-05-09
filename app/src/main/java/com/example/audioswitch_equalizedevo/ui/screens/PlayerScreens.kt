@@ -56,7 +56,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
             .padding(6.dp)
     ) {
         // Song Icon
-        viewModel.getcurrentSong().let {
+        viewModel.getcurrentSong().let {  //TODO Current song not updating from songrow click
             Image(
                 painter = // Enable crossfade animation
                 rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
@@ -113,7 +113,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
 
 @Composable
 fun PlayerScreen(navController: NavHostController, viewModel: SongsViewModel) {
-    Column {
+    Column (modifier = Modifier.padding(126.dp)  ) {
         Text(text = "Player Screen")
     }
 }
