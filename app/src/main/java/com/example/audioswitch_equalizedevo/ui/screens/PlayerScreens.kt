@@ -51,7 +51,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
             .fillMaxWidth()
             .height(60.dp)
             .clickable(onClick = { navController.navigate("player")
-            viewModel.changeScreen(screenState.PLAYER)
+                viewModel.changeScreen(screenState.PLAYER)
             })
             .padding(6.dp)
     ) {

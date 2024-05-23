@@ -40,18 +40,19 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().release()
     }
     fun playPause() {
-        if(_uiState.value.isPlaying){
-            _uiState.value = _uiState.value.copy(isPlaying = false)
+        if(exoPlayer.getExoPlayer().isPlaying){
+            _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition, isPlaying = false)
             exoPlayer.getExoPlayer().pause()
         }
-        else{
-            _uiState.value = _uiState.value.copy(isPlaying = true)
-            for (song in songs.value){
-                exoPlayer.MediaList += MediaItem.fromUri (Uri.parse(song.fileUri))
+        else {
+            for (song in songs.value) {
+                exoPlayer.MediaList += MediaItem.fromUri(Uri.parse(song.fileUri))
             }
             exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
             exoPlayer.getExoPlayer().prepare()
+            exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal)
             exoPlayer.getExoPlayer().play()
+            _uiState.value = _uiState.value.copy(isPlaying = true)
         }
     }
     fun playSong(song: Songs) {  //on ROW TAP
@@ -61,7 +62,7 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
-        _uiState.value = _uiState.value.copy(isPlaying = true)
+        _uiState.value = _uiState.value.copy(seekVal = 0)
     }
     fun getcurrentSong(): Songs {
         if(!songs.value.isEmpty()){
