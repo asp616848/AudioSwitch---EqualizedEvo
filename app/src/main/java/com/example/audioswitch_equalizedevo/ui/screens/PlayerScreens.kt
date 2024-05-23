@@ -40,18 +40,18 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
 @Composable
 fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
-    var playing by rememberSaveable { mutableStateOf(viewModel.exoPlayer.getExoPlayer().isPlaying) }
+    var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(uiState.seekVal) {
-        playing = viewModel.exoPlayer.getExoPlayer().isPlaying
+    LaunchedEffect(uiState.isPlaying) {
+        playing = uiState.isPlaying
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
             .clickable(onClick = { navController.navigate("player")
-            viewModel.changeScreen(screenState.PLAYER)
+                viewModel.changeScreen(screenState.PLAYER)
             })
             .padding(6.dp)
     ) {
