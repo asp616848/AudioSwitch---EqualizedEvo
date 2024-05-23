@@ -16,7 +16,6 @@ class FetchMusic @Inject constructor(@ActivityContext val context: Context){
     fun getPlayList() : ArrayList<Songs> {
         val selection: String? = null
         val selectionArgs: Array<String>? = null
-
         val proj = arrayOf(
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
