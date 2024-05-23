@@ -62,7 +62,7 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
-        _uiState.value = _uiState.value.copy(seekVal = 0)
+        _uiState.value = _uiState.value.copy(seekVal = 0, isPlaying = true)
     }
     fun getcurrentSong(): Songs {
         if(!songs.value.isEmpty()){
