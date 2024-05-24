@@ -48,7 +48,9 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
         mutableStateOf(viewModel.getcurrentSong())
     }
     Log.d("currSong", "DDDDDDDcurrSong: ${uiState.songId}")
-
+    LaunchedEffect(viewModel.getcurrentSong()) {
+        currSong = viewModel.getcurrentSong()
+    }
     LaunchedEffect(uiState.isPlaying) {
         playing = uiState.isPlaying
     }
