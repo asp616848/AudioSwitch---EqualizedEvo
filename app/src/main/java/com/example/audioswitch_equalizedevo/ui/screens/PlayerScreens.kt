@@ -1,7 +1,6 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -35,7 +34,6 @@ import androidx.media3.ui.R
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
@@ -47,7 +45,6 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
     var currSong by remember {
         mutableStateOf(viewModel.getcurrentSong())
     }
-    Log.d("currSong", "DDDDDDDcurrSong: ${uiState.songId}")
     LaunchedEffect(viewModel.getcurrentSong()) {
         currSong = viewModel.getcurrentSong()
     }
