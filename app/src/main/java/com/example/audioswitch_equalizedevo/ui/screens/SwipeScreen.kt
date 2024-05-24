@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -26,9 +29,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.audioswitch_equalizedevo.data.TabItem
@@ -52,19 +57,19 @@ val tabItems = listOf(
     }
 
     Column(modifier = Modifier.padding(paddingValues)){
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(selectedTabIndex = selectedTabIndex, modifier = Modifier.height(60.dp).weight(0.08f)){
             tabItems.forEachIndexed { index, tabItem ->
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = {
                         selectedTabIndex = index
                     },
-                    text = { Text(tabItem.title) },
+                    text = { Text(tabItem.title)},
                     icon = {
                         if (selectedTabIndex == index) {
-                            tabItem.selectedIcon
+                            Icon(tabItem.selectedIcon, contentDescription = null)
                         } else {
-                            tabItem.unselectedIcon
+                            Icon(tabItem.unselectedIcon, contentDescription = null)
                         }
                     }
                 )
