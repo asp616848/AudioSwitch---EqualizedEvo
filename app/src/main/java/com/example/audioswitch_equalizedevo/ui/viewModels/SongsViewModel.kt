@@ -1,6 +1,7 @@
 package com.example.audioswitch_equalizedevo.ui.viewModels
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import com.example.audioswitch_equalizedevo.data.ExoPlayer1
@@ -52,7 +53,7 @@ class SongsViewModel @Inject constructor(
             exoPlayer.getExoPlayer().prepare()
             exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal)
             exoPlayer.getExoPlayer().play()
-            _uiState.value = _uiState.value.copy(isPlaying = true)
+            _uiState.value = _uiState.value.copy(isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
         }
     }
     fun playSong(song: Songs) {  //on ROW TAP
@@ -62,18 +63,32 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
-        _uiState.value = _uiState.value.copy(seekVal = 0)
+        _uiState.value = _uiState.value.copy(seekVal = 0, isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
     }
     fun getcurrentSong(): Songs {
-        if(!songs.value.isEmpty()){
-            return exoPlayer.getExoPlayer().currentMediaItem?.mediaMetadata?.title?.let { title ->
-                songs.value.first { it.title == title }
-            } ?: songs.value.first()
-        }
-        else{
+        Log.e("getCurr", "INVOKED")
+
+        if (songs.value.isNotEmpty()) {
+            Log.d("getCurr", "Songs list size: ${songs.value.size}")
+
+            val exoPlayer = exoPlayer.getExoPlayer()
+            val currentMediaItem = exoPlayer.currentMediaItem
+            val title = currentMediaItem?.localConfiguration?.uri.toString()
+
+            Log.d("getCurr", "Current media item title: $title")
+
+            val matchedSong = songs.value.firstOrNull {
+                Log.d("getCurr", "Checking song: ${it.fileUri}")
+                it.fileUri == title
+            }
+
+            return matchedSong ?: Songs(title = "No Song selected")
+        } else {
+            Log.e("getCurr", "Songs list is empty")
             return Songs(title = "No Song selected")
         }
     }
+
     fun changeScreen(s: screenState) {
         _uiState.value = _uiState.value.copy(screenState = s)
     }

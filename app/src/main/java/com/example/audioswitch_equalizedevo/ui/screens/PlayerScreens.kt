@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -33,7 +34,6 @@ import androidx.media3.ui.R
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
@@ -42,7 +42,12 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
-
+    var currSong by remember {
+        mutableStateOf(viewModel.getcurrentSong())
+    }
+    LaunchedEffect(viewModel.getcurrentSong()) {
+        currSong = viewModel.getcurrentSong()
+    }
     LaunchedEffect(uiState.isPlaying) {
         playing = uiState.isPlaying
     }
@@ -50,36 +55,37 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .clickable(onClick = { navController.navigate("player")
+            .clickable(onClick = {
+                navController.navigate("player")
                 viewModel.changeScreen(screenState.PLAYER)
             })
             .padding(6.dp)
     ) {
         // Song Icon
-        viewModel.getcurrentSong().let {  //TODO Current song not updating from songrow click
-            Image(
-                painter = // Enable crossfade animation
-                rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
-                    (LocalContext.current).data(data = Uri.parse(it.albumArt)).apply(block = fun ImageRequest.Builder.() {
-                    crossfade(true) // Enable crossfade animation
-                    placeholder(R.drawable.exo_ic_audiotrack) // Placeholder while loading
-                }).build()
-                ),
-                contentDescription = "Song Icon",
-                modifier = Modifier
-                    .requiredSize(60.dp)
-                    .padding(4.dp)
-            )
 
-            // Text
-            Column(modifier = Modifier
-                .weight(1f)
-                .offset(x = 6.dp)) {
+        Image(
+            painter = // Enable crossfade animation
+            rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
+                (LocalContext.current).data(data = Uri.parse(currSong.albumArt)).apply(block = fun ImageRequest.Builder.() {
+                crossfade(true) // Enable crossfade animation
+                placeholder(R.drawable.exo_ic_audiotrack) // Placeholder while loading
+            }).build()
+            ),
+            contentDescription = "Song Icon",
+            modifier = Modifier
+                .requiredSize(60.dp)
+                .padding(4.dp)
+        )
 
-                Text(text = it.title)
-                Text(text = it.artist)
-            }
+        // Text
+        Column(modifier = Modifier
+            .weight(1f)
+            .offset(x = 6.dp)) {
+
+            Text(text = currSong.title)
+            Text(text = currSong.artist)
         }
+
 
         // Previous Button
         IconButton(
