@@ -44,7 +44,7 @@ import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 fun SwipeScreen(navController: NavController, paddingValues: PaddingValues, viewModel: SongsViewModel) {
 val tabItems = listOf(
     TabItem(title = "Songs", selectedIcon = Icons.Default.Home, unselectedIcon = Icons.TwoTone.Home),
-    TabItem(title = "Tab 2", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
+    TabItem(title = "Favourites", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
 )
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
     val pagerState = rememberPagerState { tabItems.size }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
@@ -60,7 +61,6 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
     fun playSong(song: Songs) {
         viewModel.playSong(song)
     }
-
     Column{
         LazyColumn(contentPadding = paddingValues,
             modifier = Modifier
@@ -71,6 +71,7 @@ fun SongsScreen(paddingValues: PaddingValues, viewModel: SongsViewModel) {
             if (songList.isNotEmpty()) {
                 items(songList) { song ->  /* can't use foreach here since
      it's not a composable lambda function but items returns a composable lambda function*/
+                    Spacer(modifier = Modifier.height(10.dp))
                     SongRow(song = song, ::playSong) // :: is used to pass a reference to a function
                 }
             } else {
