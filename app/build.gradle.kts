@@ -74,7 +74,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation ("androidx.activity:activity-ktx:1.8.2")
-    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+    implementation ("androidx.fragment:fragment-ktx:1.7.1")
     // Testing Fragments in Isolation
     debugImplementation ("androidx.fragment:fragment-testing:1.6.2")
     // Cast dependencies for google services cast framework
