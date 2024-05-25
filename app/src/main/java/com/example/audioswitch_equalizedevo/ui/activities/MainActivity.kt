@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    SharedTransitionScope{}
                     NavHost(navController = navController, startDestination = "home") {
                         composable("home") { HomeScreen(navController, viewModel) }
                         composable("player") { PlayerScreen(navController, viewModel) }
