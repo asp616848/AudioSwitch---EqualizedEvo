@@ -12,6 +12,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -44,6 +46,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +60,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SharedTransitionScope{}
-                    NavHost(navController = navController, startDestination = "home") {
-                        composable("home") { HomeScreen(navController, viewModel) }
-                        composable("player") { PlayerScreen(navController, viewModel) }
+                    SharedTransitionScope {
+                        val navController = rememberNavController()
+
+                        NavHost(navController = navController, startDestination = "home") {
+                            composable("home") { HomeScreen(navController, viewModel, this) }
+                            composable("player") { PlayerScreen(navController, viewModel, this) }
+                        }
                     }
                 }
             }

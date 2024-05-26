@@ -1,5 +1,8 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -19,9 +22,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: SongsViewModel) {
+fun SharedTransitionScope.HomeScreen(navController: NavHostController, viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -63,6 +66,6 @@ fun HomeScreen(navController: NavHostController, viewModel: SongsViewModel) {
             }
         }
     ) {
-        SwipeScreen(navController, it, viewModel)
+        SwipeScreen(navController, it, viewModel, animatedVisibilityScope)
     }
 }
