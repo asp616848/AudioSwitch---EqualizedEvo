@@ -1,6 +1,9 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -39,9 +42,9 @@ import androidx.navigation.NavController
 import com.example.audioswitch_equalizedevo.data.TabItem
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun SwipeScreen(navController: NavController, paddingValues: PaddingValues, viewModel: SongsViewModel) {
+fun SharedTransitionScope.SwipeScreen(navController: NavController, paddingValues: PaddingValues, viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
 val tabItems = listOf(
     TabItem(title = "Songs", selectedIcon = Icons.Default.Home, unselectedIcon = Icons.TwoTone.Home),
     TabItem(title = "Favourites", selectedIcon = Icons.Default.Star, unselectedIcon = Icons.TwoTone.Star),
@@ -96,6 +99,6 @@ val tabItems = listOf(
             }
 
         }
-        PlayerCompact(navController, viewModel)
+        PlayerCompact(navController, viewModel, animatedVisibilityScope)
     }
 }

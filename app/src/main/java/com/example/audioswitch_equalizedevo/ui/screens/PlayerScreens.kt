@@ -1,10 +1,15 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -28,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.media3.ui.R
@@ -38,8 +44,10 @@ import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
 
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
+fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
     var currSong by remember {
@@ -63,7 +71,7 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
     ) {
         // Song Icon
 
-        Image(
+        Image(  //shared element modifier for shared element transition only for image
             painter = // Enable crossfade animation
             rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
                 (LocalContext.current).data(data = Uri.parse(currSong.albumArt)).apply(block = fun ImageRequest.Builder.() {
@@ -72,9 +80,10 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
             }).build()
             ),
             contentDescription = "Song Icon",
-            modifier = Modifier
-                .requiredSize(60.dp)
-                .padding(4.dp)
+            Modifier.sharedElement(
+                state = rememberSharedContentState(key = "image"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
         )
 
         // Text
@@ -82,7 +91,11 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
             .weight(1f)
             .offset(x = 6.dp)) {
 
-            Text(text = currSong.title)
+            Text(text = currSong.title,
+                Modifier.sharedElement(
+                    state = rememberSharedContentState(key = "text"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                ))
             Text(text = currSong.artist)
         }
 
@@ -117,9 +130,37 @@ fun PlayerCompact(navController: NavController, viewModel: SongsViewModel) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PlayerScreen(navController: NavHostController, viewModel: SongsViewModel) {
-    Column (modifier = Modifier.padding(126.dp)  ) {
+fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope ) {
+    Column (modifier = Modifier.padding(126.dp).fillMaxSize()  ) {
+        var currSong by remember {
+            mutableStateOf(viewModel.getcurrentSong())
+        }
         Text(text = "Player Screen")
+        Image(  //shared element modifier for shared element transition only for image
+            painter = // Enable crossfade animation
+            rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
+                (LocalContext.current).data(data = Uri.parse(currSong.albumArt)).apply(block = fun ImageRequest.Builder.() {
+                crossfade(true) // Enable crossfade animation
+                placeholder(R.drawable.exo_ic_audiotrack) // Placeholder while loading
+            }).build()
+            ),
+            contentDescription = "Song Icon",
+            modifier = Modifier
+                .requiredSize(60.dp)
+                .padding(4.dp)
+                .sharedElement(
+                    state = rememberSharedContentState(key = "image"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
+        )
+        Text(text = currSong.title,
+            Modifier.sharedElement(
+            state = rememberSharedContentState(key = "text"),
+            animatedVisibilityScope = animatedVisibilityScope
+            )
+        )
+
     }
 }
