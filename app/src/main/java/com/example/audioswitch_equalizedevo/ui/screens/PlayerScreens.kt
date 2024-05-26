@@ -82,10 +82,7 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
             contentDescription = "Song Icon",
             Modifier.sharedElement(
                 state = rememberSharedContentState(key = "image"),
-                animatedVisibilityScope = animatedVisibilityScope,
-                boundsTransform = { _, _ ->
-                    tween(1000)
-                }
+                animatedVisibilityScope = animatedVisibilityScope
             )
         )
 
@@ -97,10 +94,7 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
             Text(text = currSong.title,
                 Modifier.sharedElement(
                     state = rememberSharedContentState(key = "text"),
-                    animatedVisibilityScope = animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(1000)
-                    }
+                    animatedVisibilityScope = animatedVisibilityScope
                 ))
             Text(text = currSong.artist)
         }
@@ -158,19 +152,13 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
                 .padding(4.dp)
                 .sharedElement(
                     state = rememberSharedContentState(key = "image"),
-                    animatedVisibilityScope = animatedVisibilityScope,
-                    boundsTransform = { _, _ ->
-                        tween(1000)
-                    }
+                    animatedVisibilityScope = animatedVisibilityScope
                 )
         )
         Text(text = currSong.title,
             Modifier.sharedElement(
             state = rememberSharedContentState(key = "text"),
-            animatedVisibilityScope = animatedVisibilityScope,
-            boundsTransform = { _, _ ->
-                tween(1000)
-            }
+            animatedVisibilityScope = animatedVisibilityScope
             )
         )
 
