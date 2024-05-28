@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-        viewModel = ViewModelProvider(this).get(SongsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
         setContent {
             enableEdgeToEdge()
             val navController = rememberNavController()

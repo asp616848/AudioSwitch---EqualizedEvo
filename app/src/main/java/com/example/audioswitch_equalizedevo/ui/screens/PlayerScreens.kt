@@ -111,7 +111,10 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
         // Play/Pause Button
         IconButton(
             onClick = { viewModel.playPause() },
-            modifier = Modifier.size(35.dp)
+            modifier = Modifier.size(35.dp).sharedElement(
+                state = rememberSharedContentState(key = "pause"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
         ) {
             // Use the playing state to decide which icon to display
             val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
@@ -133,10 +136,19 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope ) {
+    var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
+    val uiState by viewModel.uiState.collectAsState()
+    var currSong by remember {
+        mutableStateOf(viewModel.getcurrentSong())
+    }
+    LaunchedEffect(viewModel.getcurrentSong()) {
+        currSong = viewModel.getcurrentSong()
+    }
+    LaunchedEffect(uiState.isPlaying) {
+        playing = uiState.isPlaying
+    }
+
     Column (modifier = Modifier.padding(126.dp).fillMaxSize()  ) {
-        var currSong by remember {
-            mutableStateOf(viewModel.getcurrentSong())
-        }
         Text(text = "Player Screen")
         Image(  //shared element modifier for shared element transition only for image
             painter = // Enable crossfade animation
@@ -155,6 +167,20 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
                     animatedVisibilityScope = animatedVisibilityScope
                 )
         )
+        IconButton(
+            onClick = { viewModel.playPause() },
+            modifier = Modifier.size(35.dp).sharedElement(
+                state = rememberSharedContentState(key = "pause"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
+        ) {
+            // Use the playing state to decide which icon to display
+            val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
+            Icon(
+                icon,
+                contentDescription = if (playing) "Pause" else "Play",
+            )
+        }
         Text(text = currSong.title,
             Modifier.sharedElement(
             state = rememberSharedContentState(key = "text"),
