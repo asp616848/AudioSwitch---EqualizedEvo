@@ -81,8 +81,7 @@ class MainActivity : ComponentActivity() {
             ) == PackageManager.PERMISSION_DENIED
         ) {
             requestPermissionLauncher.launch(readAudioPermission)
-        }
-        else{
+        } else {
             Toast.makeText(this, "Welcome", Toast.LENGTH_SHORT).show()
         }
     }
