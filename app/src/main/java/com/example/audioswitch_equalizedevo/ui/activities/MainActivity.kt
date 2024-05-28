@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -46,13 +47,18 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "Permission is required to access Music Files, Enable it in device settings", Toast.LENGTH_SHORT).show()
             }
         }
+    private lateinit var viewModel: SongsViewModel
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchSongs()
+    }
     @OptIn(ExperimentalSharedTransitionApi::class)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-        val viewModel : SongsViewModel by viewModels()
+        viewModel = ViewModelProvider(this).get(SongsViewModel::class.java)
         setContent {
             enableEdgeToEdge()
             val navController = rememberNavController()
