@@ -29,7 +29,7 @@ class SongsViewModel @Inject constructor(
 
     fun fetchSongs() {
         fetchMusic.getPlayList().let {
-            _songs.value = it
+            _songs.value = it.distinct()
         }
     }
 
