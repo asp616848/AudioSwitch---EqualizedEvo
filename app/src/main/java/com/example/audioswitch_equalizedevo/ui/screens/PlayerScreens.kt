@@ -83,7 +83,7 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
             Modifier.sharedElement(
                 state = rememberSharedContentState(key = "image"),
                 animatedVisibilityScope = animatedVisibilityScope
-            )
+            ).size(40.dp)
         )
 
         // Text

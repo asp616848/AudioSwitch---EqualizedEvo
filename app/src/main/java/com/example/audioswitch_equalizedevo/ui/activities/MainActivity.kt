@@ -68,8 +68,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SharedTransitionLayout {
-                        val navController = rememberNavController()
-
                         NavHost(navController = navController, startDestination = "home") {
                             composable("home") { HomeScreen(navController, viewModel, this) }
                             composable("player") { PlayerScreen(navController, viewModel, this) }
