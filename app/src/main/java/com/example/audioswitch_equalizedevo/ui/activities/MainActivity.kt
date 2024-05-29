@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkPermission()
-        viewModel = ViewModelProvider(this).get(SongsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[SongsViewModel::class.java]
         setContent {
             enableEdgeToEdge()
             val navController = rememberNavController()
@@ -68,8 +68,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SharedTransitionLayout {
-                        val navController = rememberNavController()
-
                         NavHost(navController = navController, startDestination = "home") {
                             composable("home") { HomeScreen(navController, viewModel, this) }
                             composable("player") { PlayerScreen(navController, viewModel, this) }
