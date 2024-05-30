@@ -4,9 +4,7 @@ import android.net.Uri
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -122,7 +120,12 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
         // Previous Button
         IconButton(
             onClick = { viewModel.exoPlayer.playPrev() },
-            modifier = Modifier.size(35.dp)
+            modifier = Modifier
+                .size(35.dp)
+                .sharedElement(
+                    state = rememberSharedContentState(key = "prev"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
         ) {
             Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
         }
@@ -147,7 +150,12 @@ fun SharedTransitionScope.PlayerCompact(navController: NavController, viewModel:
         // Next Button
         IconButton(
             onClick = { viewModel.exoPlayer.playNext() },
-            modifier = Modifier.size(35.dp)
+            modifier = Modifier
+                .size(35.dp)
+                .sharedElement(
+                    state = rememberSharedContentState(key = "next"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
         ) {
             Icon(Icons.Filled.SkipNext, contentDescription = "Next")
         }
@@ -170,9 +178,8 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
     }
 
     Column (modifier = Modifier
-        .padding(126.dp)
+        .padding(100.dp)
         .fillMaxSize()  ) {
-        Text(text = "Player Screen")
         Image(  //shared element modifier for shared element transition only for image
             painter = // Enable crossfade animation
             rememberAsyncImagePainter(ImageRequest.Builder // Placeholder while loading
@@ -183,35 +190,70 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
             ),
             contentDescription = "Song Icon",
             modifier = Modifier
-                .requiredSize(60.dp)
+                .requiredSize(270.dp)
                 .padding(4.dp)
                 .sharedElement(
                     state = rememberSharedContentState(key = "image"),
                     animatedVisibilityScope = animatedVisibilityScope
                 )
         )
-        IconButton(
-            onClick = { viewModel.playPause() },
-            modifier = Modifier
-                .size(35.dp)
-                .sharedElement(
-                    state = rememberSharedContentState(key = "pause"),
-                    animatedVisibilityScope = animatedVisibilityScope
-                )
-        ) {
-            // Use the playing state to decide which icon to display
-            val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
-            Icon(
-                icon,
-                contentDescription = if (playing) "Pause" else "Play",
-            )
-        }
         Text(text = currSong.title,
-            Modifier.sharedElement(
+            Modifier.fillMaxWidth().sharedElement(
             state = rememberSharedContentState(key = "text"),
             animatedVisibilityScope = animatedVisibilityScope
             )
         )
+        Row(Modifier.fillMaxWidth()) {
+            Controls(viewModel, animatedVisibilityScope)
+        }
+    }
+}
 
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
+    var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
+    val uiState by viewModel.uiState.collectAsState()
+
+    //seek touch and slide bar composable goes here TODO
+
+    LaunchedEffect(uiState.isPlaying) {
+        playing = uiState.isPlaying
+    }
+    // Previous Button
+    IconButton(
+        onClick = { viewModel.exoPlayer.playPrev() },
+        modifier = Modifier.size(35.dp).sharedElement(
+            state = rememberSharedContentState(key = "prev"),
+            animatedVisibilityScope = animatedVisibilityScope
+        )
+    ) {
+        Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
+    }
+    IconButton(
+        onClick = { viewModel.playPause() },
+        modifier = Modifier
+            .size(45.dp)
+            .sharedElement(
+                state = rememberSharedContentState(key = "pause"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
+    ) {
+        // Use the playing state to decide which icon to display
+        val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
+        Icon(
+            icon,
+            contentDescription = if (playing) "Pause" else "Play",
+        )
+    }
+    // Next Button
+    IconButton(
+        onClick = { viewModel.exoPlayer.playNext() },
+        modifier = Modifier.size(35.dp).sharedElement(
+            state = rememberSharedContentState(key = "next"),
+            animatedVisibilityScope = animatedVisibilityScope
+        )
+    ) {
+        Icon(Icons.Filled.SkipNext, contentDescription = "Next")
     }
 }
