@@ -21,6 +21,9 @@ class SongsViewModel @Inject constructor(
     val fetchMusic: FetchMusic,
     val exoPlayer: ExoPlayer1
 ) : ViewModel() {
+    private val _uiState = MutableStateFlow(UIState())
+    val uiState: StateFlow<UIState> = _uiState.asStateFlow()
+
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
@@ -28,9 +31,10 @@ class SongsViewModel @Inject constructor(
     }
 
     fun getSeek() : Float =uiState.value.seekVal.toFloat()
-    fun seekTo(a:Float){
-    }
 
+    fun seekTo(value: Float){
+        exoPlayer.getExoPlayer().seekTo(value.toLong())
+    }
 
     fun fetchSongs() {
         fetchMusic.getPlayList().let {
@@ -38,8 +42,7 @@ class SongsViewModel @Inject constructor(
         }
     }
 
-    private val _uiState = MutableStateFlow(UIState())
-    val uiState: StateFlow<UIState> = _uiState.asStateFlow()
+
 
     override fun onCleared() {
         super.onCleared()
