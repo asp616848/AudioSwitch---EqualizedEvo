@@ -24,11 +24,13 @@ import androidx.compose.material.icons.twotone.Pause
 import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.media3.ui.PlayerView
 import androidx.media3.ui.R
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -198,10 +201,12 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
                 )
         )
         Text(text = currSong.title,
-            Modifier.fillMaxWidth().sharedElement(
-            state = rememberSharedContentState(key = "text"),
-            animatedVisibilityScope = animatedVisibilityScope
-            )
+            Modifier
+                .fillMaxWidth()
+                .sharedElement(
+                    state = rememberSharedContentState(key = "text"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
         )
         Row(Modifier.fillMaxWidth()) {
             Controls(viewModel, animatedVisibilityScope)
@@ -214,46 +219,61 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
 fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
+    var currSeek:Float = 0F
 
     //seek touch and slide bar composable goes here TODO
 
     LaunchedEffect(uiState.isPlaying) {
         playing = uiState.isPlaying
     }
-    // Previous Button
-    IconButton(
-        onClick = { viewModel.exoPlayer.playPrev() },
-        modifier = Modifier.size(35.dp).sharedElement(
-            state = rememberSharedContentState(key = "prev"),
-            animatedVisibilityScope = animatedVisibilityScope
-        )
-    ) {
-        Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
+    LaunchedEffect(uiState.seekVal) {
+        currSeek = uiState.seekVal.toFloat()
     }
-    IconButton(
-        onClick = { viewModel.playPause() },
-        modifier = Modifier
-            .size(45.dp)
-            .sharedElement(
-                state = rememberSharedContentState(key = "pause"),
-                animatedVisibilityScope = animatedVisibilityScope
-            )
-    ) {
-        // Use the playing state to decide which icon to display
-        val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
-        Icon(
-            icon,
-            contentDescription = if (playing) "Pause" else "Play",
-        )
+
+    Column{// Previous Button
+        Row{
+            IconButton(
+                onClick = { viewModel.exoPlayer.playPrev() },
+                modifier = Modifier
+                    .size(35.dp)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "prev"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+            ) {
+                Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
+            }
+            IconButton(
+                onClick = { viewModel.playPause() },
+                modifier = Modifier
+                    .size(45.dp)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "pause"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+            ) {
+                // Use the playing state to decide which icon to display
+                val icon = if (playing) Icons.TwoTone.Pause else Icons.TwoTone.PlayArrow
+                Icon(
+                    icon,
+                    contentDescription = if (playing) "Pause" else "Play",
+                )
+            }
+            // Next Button
+            IconButton(
+                onClick = { viewModel.exoPlayer.playNext() },
+                modifier = Modifier
+                    .size(35.dp)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "next"),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+            ) {
+                Icon(Icons.Filled.SkipNext, contentDescription = "Next")
+            }
+        }
+        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it) })
     }
-    // Next Button
-    IconButton(
-        onClick = { viewModel.exoPlayer.playNext() },
-        modifier = Modifier.size(35.dp).sharedElement(
-            state = rememberSharedContentState(key = "next"),
-            animatedVisibilityScope = animatedVisibilityScope
-        )
-    ) {
-        Icon(Icons.Filled.SkipNext, contentDescription = "Next")
-    }
+
+
 }
