@@ -24,6 +24,7 @@ import androidx.compose.material.icons.twotone.Pause
 import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -198,10 +199,12 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
                 )
         )
         Text(text = currSong.title,
-            Modifier.fillMaxWidth().sharedElement(
-            state = rememberSharedContentState(key = "text"),
-            animatedVisibilityScope = animatedVisibilityScope
-            )
+            Modifier
+                .fillMaxWidth()
+                .sharedElement(
+                    state = rememberSharedContentState(key = "text"),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
         )
         Row(Modifier.fillMaxWidth()) {
             Controls(viewModel, animatedVisibilityScope)
@@ -223,10 +226,12 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
     // Previous Button
     IconButton(
         onClick = { viewModel.exoPlayer.playPrev() },
-        modifier = Modifier.size(35.dp).sharedElement(
-            state = rememberSharedContentState(key = "prev"),
-            animatedVisibilityScope = animatedVisibilityScope
-        )
+        modifier = Modifier
+            .size(35.dp)
+            .sharedElement(
+                state = rememberSharedContentState(key = "prev"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
     ) {
         Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous")
     }
@@ -249,11 +254,15 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
     // Next Button
     IconButton(
         onClick = { viewModel.exoPlayer.playNext() },
-        modifier = Modifier.size(35.dp).sharedElement(
-            state = rememberSharedContentState(key = "next"),
-            animatedVisibilityScope = animatedVisibilityScope
-        )
+        modifier = Modifier
+            .size(35.dp)
+            .sharedElement(
+                state = rememberSharedContentState(key = "next"),
+                animatedVisibilityScope = animatedVisibilityScope
+            )
     ) {
         Icon(Icons.Filled.SkipNext, contentDescription = "Next")
     }
+
+    Slider(value = viewModel.getSeek(), onValueChange = { viewModel.seekTo(it) })
 }

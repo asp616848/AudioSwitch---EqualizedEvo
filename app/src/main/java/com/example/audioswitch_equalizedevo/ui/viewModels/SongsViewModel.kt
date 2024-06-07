@@ -27,6 +27,11 @@ class SongsViewModel @Inject constructor(
         fetchSongs()
     }
 
+    fun getSeek() : Float =uiState.value.seekVal.toFloat()
+    fun seekTo(a:Float){
+    }
+
+
     fun fetchSongs() {
         fetchMusic.getPlayList().let {
             _songs.value = it.distinct()
