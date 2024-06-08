@@ -3,6 +3,7 @@ package com.example.audioswitch_equalizedevo.ui.viewModels
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import com.example.audioswitch_equalizedevo.data.ExoPlayer1
 import com.example.audioswitch_equalizedevo.data.FetchMusic
@@ -30,10 +31,10 @@ class SongsViewModel @Inject constructor(
         fetchSongs()
     }
 
-    fun getSeek() : Float =uiState.value.seekVal.toFloat()
-
     fun seekTo(value: Float){
         exoPlayer.getExoPlayer().seekTo(value.toLong())
+        _uiState.value = _uiState.value.copy(seekVal = value)
+        Log.d("abc", "KUCH ${_uiState.value.seekVal} : ${uiState.value.seekVal} : ${value.toLong()} : ${value}")
     }
 
     fun fetchSongs() {
@@ -42,15 +43,13 @@ class SongsViewModel @Inject constructor(
         }
     }
 
-
-
     override fun onCleared() {
         super.onCleared()
         exoPlayer.getExoPlayer().release()
     }
     fun playPause() {
         if(exoPlayer.getExoPlayer().isPlaying){
-            _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition, isPlaying = false)
+            _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition.toFloat(), isPlaying = false) //TODO
             exoPlayer.getExoPlayer().pause()
         }
         else {
@@ -59,7 +58,7 @@ class SongsViewModel @Inject constructor(
             }
             exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
             exoPlayer.getExoPlayer().prepare()
-            exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal)
+            exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal.toLong())
             exoPlayer.getExoPlayer().play()
             _uiState.value = _uiState.value.copy(isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
         }
@@ -71,7 +70,7 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
-        _uiState.value = _uiState.value.copy(seekVal = 0, isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
+        _uiState.value = _uiState.value.copy(seekVal = 0F, isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
     }
     fun getcurrentSong(): Songs {
         Log.e("getCurr", "INVOKED")

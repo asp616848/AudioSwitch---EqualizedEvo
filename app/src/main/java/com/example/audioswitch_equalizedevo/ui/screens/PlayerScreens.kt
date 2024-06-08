@@ -219,7 +219,7 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
 fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
-    var currSeek:Float = 0F
+    var currSeek:Long = 0
 
     //seek touch and slide bar composable goes here TODO
 
@@ -227,7 +227,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
         playing = uiState.isPlaying
     }
     LaunchedEffect(uiState.seekVal) {
-        currSeek = uiState.seekVal.toFloat()
+        currSeek = uiState.seekVal.toLong()
     }
 
     Column{// Previous Button
@@ -272,7 +272,8 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
                 Icon(Icons.Filled.SkipNext, contentDescription = "Next")
             }
         }
-        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it) })
+        Slider(value = currSeek.toFloat(), onValueChange = { viewModel.seekTo(it)
+        currSeek = it.toLong()})
     }
 
 
