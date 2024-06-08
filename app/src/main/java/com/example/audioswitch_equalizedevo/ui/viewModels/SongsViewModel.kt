@@ -32,9 +32,10 @@ class SongsViewModel @Inject constructor(
     }
 
     fun seekTo(value: Float){
-        exoPlayer.getExoPlayer().seekTo(value.toLong())
-        _uiState.value = _uiState.value.copy(seekVal = value)
-        Log.d("abc", "KUCH ${_uiState.value.seekVal} : ${uiState.value.seekVal} : ${value.toLong()} : ${value}")
+        val totalDuration = exoPlayer.getExoPlayer().duration
+        val seekPosition = (value * totalDuration).toLong()
+        exoPlayer.getExoPlayer().seekTo(seekPosition)
+        _uiState.value = _uiState.value.copy(seekVal = seekPosition)
     }
 
     fun fetchSongs() {
@@ -49,7 +50,7 @@ class SongsViewModel @Inject constructor(
     }
     fun playPause() {
         if(exoPlayer.getExoPlayer().isPlaying){
-            _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition.toFloat(), isPlaying = false) //TODO
+            _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition, isPlaying = false) //TODO
             exoPlayer.getExoPlayer().pause()
         }
         else {
@@ -70,7 +71,7 @@ class SongsViewModel @Inject constructor(
         exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
         exoPlayer.getExoPlayer().prepare()
         exoPlayer.getExoPlayer().play()
-        _uiState.value = _uiState.value.copy(seekVal = 0F, isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
+        _uiState.value = _uiState.value.copy(seekVal = 0, isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
     }
     fun getcurrentSong(): Songs {
         Log.e("getCurr", "INVOKED")
@@ -98,5 +99,12 @@ class SongsViewModel @Inject constructor(
 
     fun changeScreen(s: screenState) {
         _uiState.value = _uiState.value.copy(screenState = s)
+    }
+
+    fun getSliderVal(): Float {
+        val pos = uiState.value.seekVal
+        val dur = exoPlayer.getExoPlayer().duration
+        Log.d("getSliderVal", "${pos.toFloat()} : ${dur.toFloat()} : ${(pos.toFloat()/dur.toFloat())}")
+        return (pos.toFloat()/dur.toFloat())
     }
 }

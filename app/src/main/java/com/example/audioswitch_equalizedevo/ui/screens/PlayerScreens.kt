@@ -1,6 +1,8 @@
 package com.example.audioswitch_equalizedevo.ui.screens
 
+import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -214,12 +216,13 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
-    var currSeek:Long = 0
+    var currSeek by rememberSaveable { mutableStateOf(0f) }
 
     //seek touch and slide bar composable goes here TODO
 
@@ -227,7 +230,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
         playing = uiState.isPlaying
     }
     LaunchedEffect(uiState.seekVal) {
-        currSeek = uiState.seekVal.toLong()
+        currSeek = viewModel.getSliderVal()
     }
 
     Column{// Previous Button
@@ -272,8 +275,8 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
                 Icon(Icons.Filled.SkipNext, contentDescription = "Next")
             }
         }
-        Slider(value = currSeek.toFloat(), onValueChange = { viewModel.seekTo(it)
-        currSeek = it.toLong()})
+        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it)
+        Log.d("SLIDER", " $currSeek")})
     }
 
 
