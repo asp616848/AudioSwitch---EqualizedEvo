@@ -249,7 +249,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
             IconButton(
                 onClick = { viewModel.playPause() },
                 modifier = Modifier
-                    .size(45.dp)
+                    .size(35.dp)
                     .sharedElement(
                         state = rememberSharedContentState(key = "pause"),
                         animatedVisibilityScope = animatedVisibilityScope
@@ -275,9 +275,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
                 Icon(Icons.Filled.SkipNext, contentDescription = "Next")
             }
         }
-        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it)
-        Log.d("SLIDER", " $currSeek")})
+
+        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it) })
     }
-
-
 }
