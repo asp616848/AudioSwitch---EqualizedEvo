@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.internal.composableLambda
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -51,6 +52,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -222,7 +226,7 @@ fun SharedTransitionScope.PlayerScreen(navController: NavHostController, viewMod
 fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibilityScope: AnimatedVisibilityScope) {
     var playing by rememberSaveable { mutableStateOf(viewModel.uiState.value.isPlaying) }
     val uiState by viewModel.uiState.collectAsState()
-    var currSeek by rememberSaveable { mutableStateOf(0f) }
+    var currSeek by rememberSaveable { mutableFloatStateOf(0f) }
 
     //seek touch and slide bar composable goes here TODO
 
@@ -231,10 +235,12 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
     }
     LaunchedEffect(uiState.seekVal) {
         currSeek = viewModel.getSliderVal()
+        Log.e("CALLED AFTER CHANGE","${uiState.seekVal}")
     }
 
+
     Column{// Previous Button
-        Row{
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
             IconButton(
                 onClick = { viewModel.exoPlayer.playPrev() },
                 modifier = Modifier
@@ -275,7 +281,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
                 Icon(Icons.Filled.SkipNext, contentDescription = "Next")
             }
         }
-
-        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it) })
+        Slider(value = currSeek, onValueChange = {
+            viewModel.seekTo(it) })
     }
 }

@@ -3,6 +3,7 @@ package com.example.audioswitch_equalizedevo.ui.viewModels
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import com.example.audioswitch_equalizedevo.data.ExoPlayer1
@@ -11,9 +12,11 @@ import com.example.audioswitch_equalizedevo.data.Songs
 import com.example.audioswitch_equalizedevo.ui.UIState
 import com.example.audioswitch_equalizedevo.ui.screenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -28,6 +31,7 @@ class SongsViewModel @Inject constructor(
     private val _songs = MutableStateFlow<List<Songs>>(emptyList())
     val songs: StateFlow<List<Songs>> = _songs
     init {
+        startUpdatingSeek()
         fetchSongs()
     }
 
@@ -59,7 +63,7 @@ class SongsViewModel @Inject constructor(
             }
             exoPlayer.getExoPlayer().setMediaItems(exoPlayer.MediaList)
             exoPlayer.getExoPlayer().prepare()
-            exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal.toLong())
+            exoPlayer.getExoPlayer().seekTo(_uiState.value.seekVal)
             exoPlayer.getExoPlayer().play()
             _uiState.value = _uiState.value.copy(isPlaying = true, songId = exoPlayer.getExoPlayer().currentMediaItem?.localConfiguration?.uri.toString())
         }
@@ -106,5 +110,15 @@ class SongsViewModel @Inject constructor(
         val dur = exoPlayer.getExoPlayer().duration
         Log.d("getSliderVal", "${pos.toFloat()} : ${dur.toFloat()} : ${(pos.toFloat()/dur.toFloat())}")
         return (pos.toFloat()/dur.toFloat())
+    }
+    private fun startUpdatingSeek() {
+        viewModelScope.launch {
+            while (true) {
+                if (_uiState.value.isPlaying) {
+                    _uiState.value = _uiState.value.copy(seekVal = exoPlayer.getExoPlayer().currentPosition)
+                }
+                delay(500) // Adjust delay as needed for smoother updates
+            }
+        }
     }
 }
