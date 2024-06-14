@@ -51,6 +51,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.audioswitch_equalizedevo.ui.screenState
 import com.example.audioswitch_equalizedevo.ui.viewModels.SongsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -229,12 +232,16 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
     LaunchedEffect(uiState.isPlaying) {
         playing = uiState.isPlaying
     }
-    LaunchedEffect(uiState.seekVal) {
-        currSeek = viewModel.getSliderVal()
+    LaunchedEffect(playing) {
+        while (playing && isActive) {
+            currSeek = viewModel.getSliderVal()
+            delay(500) // Adjust delay as needed for smoother updates
+        }
     }
 
+
     Column{// Previous Button
-        Row{
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
             IconButton(
                 onClick = { viewModel.exoPlayer.playPrev() },
                 modifier = Modifier
@@ -275,7 +282,7 @@ fun SharedTransitionScope.Controls(viewModel: SongsViewModel, animatedVisibility
                 Icon(Icons.Filled.SkipNext, contentDescription = "Next")
             }
         }
-
-        Slider(value = currSeek, onValueChange = { viewModel.seekTo(it) })
+        Slider(value = currSeek, onValueChange = {
+            viewModel.seekTo(it) })
     }
 }
