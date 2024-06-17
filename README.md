@@ -41,10 +41,7 @@ To get started with the Music Player, follow these steps:
 
 1. **Clone the repository**
 
-    ```bash
-    git clone https://github.com/yourusername/music-player.git
-    cd music-player
-    ```
+    CLone and CD into the repository
 
 2. **Install on Android**
 
