@@ -1,87 +1,78 @@
-# Music Player Project
+# AudioSwitch — EqualizedEvo
 
-## Overview
+An in-progress, ad-free, open-source local music player for Android, built with Kotlin and Jetpack Compose. The long-term goal is a player with 3D spatial audio, a built-in equalizer, and a system-wide audio output switch — this README describes what's actually implemented today versus what's still planned.
 
-Welcome to the Music Player Project! This application is designed to provide a seamless and enjoyable music listening experience. While we have successfully implemented the core functionalities, there are exciting features in the pipeline such as Spatial Audio, Output Switch, and an Equalizer.
+## Current status: work in progress
 
-## Features
+This is an early-stage personal project. The core "play music from your device" experience works; the headline features from the project's vision (spatial audio, equalizer, output switching) are **not yet implemented** — they exist only as placeholder screens/enum values in the code.
 
-### Implemented Features
+### Implemented today
+- **Local library scan** — reads all audio tracks visible to `MediaStore` (title, artist, album, duration, album art, file path) via `FetchMusic`.
+- **Playback** — play/pause, skip to next/previous track, and seek, powered by AndroidX Media3 `ExoPlayer`.
+- **Now-playing UI** — a compact mini-player bar and a full-screen player, connected with Compose shared-element transitions; album art loaded with Coil.
+- **Songs list screen** — a scrollable list of all detected tracks with tap-to-play; a "No Songs Found" empty state when the library is empty.
+- **Runtime permission handling** — requests `READ_MEDIA_AUDIO` (Android 13+) or `READ_EXTERNAL_STORAGE` on older versions before scanning the library.
+- **Tabbed home screen** — swipeable tabs ("Songs" / "Favourites") using `HorizontalPager`, though only the Songs tab currently has content.
+- Dependency injection via **Hilt** for the player and music-fetching classes, following an MVVM structure (`SongsViewModel` + `UIState`).
 
-1. **Playback Controls**
-    - Play, pause, stop, next, and previous track.
-    - Seek bar to navigate through the track.
-    
-2. **Playlist Management**
-    - Create, delete, and modify playlists.
-    - Add or remove songs from playlists.
-    
-3. **Library Management**
-    - Add songs to the library.
-    - Display song metadata (title, artist, album, duration).
-    
-4. **User Interface**
-    - Clean and intuitive UI.
-    - Responsive design for both desktop and mobile devices.
+### Scaffolded but not functional yet
+- "Favourites" tab and a search action are present in the UI but currently do nothing (no favourites persistence, no search logic wired up).
+- The song row's overflow menu lists "Like / Add to Queue / Add to Playlist / Delete" actions, but none of them are implemented (`TODO` in code).
+- `screenState` includes `PLAYLISTS`, `SETTINGS`, `EQUALIZER`, `SWITCH`, and `SPATIAL_AUDIO` states, and `SwipeScreen` has placeholder pager pages for "Spatial Audio" and "Equalizer" — these are stubs with no real screens behind them yet.
+- The Gradle build already pulls in `androidx.mediarouter` and Google's Cast framework in anticipation of an output-switching feature, but no code currently uses them.
 
-### Upcoming Features
+### Planned (not started)
+- 3D / spatial audio playback (notes in the repo point at Android's `Spatializer` API).
+- A real equalizer (bass/treble/band control), likely via `android.media.audiofx.AudioEffect`.
+- System-wide audio output switching (e.g. speaker ⇄ Bluetooth ⇄ cast) via `MediaRouter`/Cast.
+- Playlist creation/management and a working Favourites/Search flow.
 
-1. **Spatial Audio**
-    - Immersive 3D audio experience to make you feel like you're in the middle of the music.
+## Tech stack
 
-2. **Output Switch**
-    - Seamlessly switch audio output between different devices (e.g., headphones, speakers, Bluetooth devices).
+- **Language:** Kotlin
+- **UI:** Jetpack Compose (Material 3), Compose Navigation, shared-element transitions (`SharedTransitionLayout`)
+- **Playback:** AndroidX Media3 `ExoPlayer` (+ media3-ui, media3-exoplayer-dash)
+- **DI:** Dagger Hilt
+- **Image loading:** Coil
+- **Data source:** Android `MediaStore` (on-device audio scan) — no backend/server component
+- **Build system:** Gradle (Kotlin DSL), Android Gradle Plugin
+- Min SDK 24, target/compile SDK 34
 
-3. **Equalizer**
-    - Customize the sound with adjustable frequency bands.
+## Project structure
 
-## Installation
+```
+app/src/main/java/com/example/audioswitch_equalizedevo/
+├── App.kt                     # Application class (Hilt entry point)
+├── data/
+│   ├── FetchMusic.kt           # Scans MediaStore for audio tracks
+│   ├── Songs.kt                 # Song data model
+│   ├── ExoPlayer1.kt            # ExoPlayer wrapper (play/pause/next/prev)
+│   └── provider.kt              # Hilt modules for ExoPlayer/FetchMusic
+└── ui/
+    ├── activities/MainActivity.kt   # Permission handling + Compose NavHost
+    ├── viewModels/SongsViewModel.kt # Playback + song list state (MVVM)
+    ├── screens/                     # HomeScreen, SwipeScreen, SongScreen, PlayerScreens
+    └── theme/                       # Compose theme, colors, typography
+```
 
-To get started with the Music Player, follow these steps:
+## Build & run
 
-1. **Clone the repository**
+Requires Android Studio (Koala or newer recommended) with JDK 17 and the Android SDK (API 34) installed.
 
-    CLone and CD into the repository
+```bash
+git clone https://github.com/asp616848/AudioSwitch---EqualizedEvo.git
+cd AudioSwitch---EqualizedEvo
+```
 
-2. **Install on Android**
+Then either open the project in Android Studio and run the `app` configuration on a device/emulator (API 24+), or build from the command line:
 
-    Use android studio or the apk file to get the app.
+```bash
+./gradlew assembleDebug
+# APK output: app/build/outputs/apk/debug/app-debug.apk
+```
 
-
-## Usage
-
-Once the application is up and running:
-
-1. **Add Music to Library**
-    - Use the "Add Music" button to upload your favorite tracks to the library.
-
-2. **Create and Manage Playlists**
-    - Navigate to the "Playlists" section to create and manage your playlists.
-
-3. **Control Playback**
-    - Use the playback controls to play, pause, skip, or go back to previous tracks.
+On first launch, grant the audio/storage permission prompt so the app can scan your device's music library.
 
 ## Contributing
 
-We welcome contributions to enhance the Music Player! To contribute:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Commit your changes and push to your branch.
-4. Open a pull request with a detailed description of your changes.
-
-## Issues and Feedback
-
-If you encounter any issues or have feedback, please open an issue on GitHub. We appreciate your input and are constantly working to improve the Music Player.
-
-## License
-
-This project is licensed under the MIT License.
-
-## Contact
-
-For any further inquiries or questions, feel free to reach out to the project maintainer at asp616848@gmail.com
-
----
-
-Thank you for using the Music Player! Enjoy your music with an ever-evolving experience.
+This is an actively evolving project — issues and pull requests are welcome, especially around the planned equalizer, spatial audio, and output-switching features noted above.
